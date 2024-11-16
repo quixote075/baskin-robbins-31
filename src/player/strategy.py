@@ -17,6 +17,8 @@ class HumanStrategy:
     while True:
       try:
         number = int(input('- Enter a number between 1 and 3: '))
+        if current_count+number>31:
+          return 31-current_count
         if 1<=number<=3:
           return number
         print('[ERR] Please enter a number between 1 and 3.')
