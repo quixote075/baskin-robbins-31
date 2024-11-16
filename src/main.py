@@ -11,7 +11,9 @@ class Game:
     while self.play.count<31:
       self.play.next_turn()
       print('\tcurrent number is..', self.play.count)
-    print(f'Game over, {self.play.state.id} lose!')
+    print(f'Game over, {self.play.state.id} lose!\n')
+    input('Press ENTER to exit the program')
+    return
 
 def main():
   game = Game()
