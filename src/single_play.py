@@ -1,6 +1,6 @@
 import sys, pygame, player
 from player.strategy import HumanStrategy4Player, ComputerStrategy
-from entity.inputbox import InputBox
+from entity import InputBox, IceCreams
 
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -23,6 +23,7 @@ class GameView:
     self.font = pygame.font.Font('../asset/NotoSansKR-Regular.ttf', 40)
 
     self.input_box = InputBox([200, 100], [320, 150])
+    self.ice_creams = IceCreams([48, 48], [86, 270])
     self.past_count = 0 # Backtrace the choosed number
 
   def update(self, number):
@@ -36,10 +37,9 @@ class GameView:
     size = text.get_size()
     self.screen.blit(text, (320-size[0]//2, 50-size[1]//2))
 
-    text = self.font.render(f'Current number is.. {game_state.play.count}', True, black)
-    size = text.get_size()
-    self.screen.blit(text, (320-size[0]//2, 350-size[1]//2))
-
+    self.ice_creams.update(game_state.play.count-self.past_count)
+    self.ice_creams.draw(self.screen)
+    
     self.input_box.draw(self.screen)
 
     self.game_state = game_state
