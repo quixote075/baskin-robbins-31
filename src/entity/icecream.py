@@ -1,4 +1,4 @@
-import pygame
+import os, pygame
 
 white = (255, 255, 255)
 apple_mint = (127, 255, 212)
@@ -16,7 +16,7 @@ class IceCream:
     self.surf.fill(white)
     pygame.draw.circle(self.surf, apple_mint, (size[0]//2, size[1]//2), size[0]//2)
 
-    self.font = pygame.font.Font('../asset/NotoSansKR-Regular.ttf', 24)
+    self.font = pygame.font.Font(os.path.join('asset', 'NotoSansKR-Regular.ttf'), 24)
     text = self.font.render(str(IceCream.counter), True, black)
     size = text.get_size()
     self.surf.blit(text, ((self.size[0]-size[0])//2, (self.size[1]-size[1])//2))
