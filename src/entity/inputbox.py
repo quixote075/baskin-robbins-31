@@ -1,4 +1,4 @@
-import pygame
+import os, pygame
 
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -13,8 +13,8 @@ class InputBox:
     self.surf.fill(white)
     pygame.draw.rect(self.surf, blue, ((0, 0), size), 5)
 
-    self.font1 = pygame.font.Font('../asset/NotoSansKR-Regular.ttf', 48)
-    self.font2 = pygame.font.Font('../asset/NotoSansKR-Regular.ttf', 12)
+    self.font1 = pygame.font.Font(os.path.join('asset', 'NotoSansKR-Regular.ttf'), 48)
+    self.font2 = pygame.font.Font(os.path.join('asset', 'NotoSansKR-Regular.ttf'), 12)
 
   def update(self, message: str):
     pygame.draw.rect(self.surf, white, ((5, 5), (self.size[0]-10, self.size[1]-10)))

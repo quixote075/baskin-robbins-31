@@ -1,4 +1,4 @@
-import sys, pygame, player
+import os, sys, pygame, player
 from player.strategy import HumanStrategy4Player, ComputerStrategy
 from entity import InputBox, IceCreams
 
@@ -20,7 +20,7 @@ class GameView:
 
     self.screen = pygame.display.set_mode([640, 480])
     self.clock = pygame.time.Clock()
-    self.font = pygame.font.Font('../asset/NotoSansKR-Regular.ttf', 40)
+    self.font = pygame.font.Font(os.path.join('asset', 'NotoSansKR-Regular.ttf'), 40)
 
     self.input_box = InputBox([200, 100], [320, 150])
     self.ice_creams = IceCreams([48, 48], [86, 270])
