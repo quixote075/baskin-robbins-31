@@ -75,6 +75,8 @@ class GameController:
   def game_play(self):
     while True:
       if self.model.play.count<31:
+        if self.model.play.state.id=='you':
+          self.view.input_box.update('Enter a number between 1 and 3')
         self.view.draw_game_state(self.model)
         self.model.update()
       else:
