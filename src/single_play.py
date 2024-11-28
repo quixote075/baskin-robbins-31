@@ -1,29 +1,91 @@
-import sys
-import pygame
+import sys, pygame, player
+from player.strategy import HumanStrategy4Player, ComputerStrategy
 from entity.inputbox import InputBox
 
-def vs_computer():
-  pygame.init()
+white = (255, 255, 255)
+black = (0, 0, 0)
 
-  screen = pygame.display.set_mode((640, 480))
-  clock = pygame.time.Clock()
+class GameModel:
+  def __init__(self):
+    self.human_strategy = HumanStrategy4Player()
+    self.computer_strategy = ComputerStrategy()
+    self.play = player.GameContext(self.human_strategy, self.computer_strategy)
 
-  white = (255, 255, 255)
+  def update(self):
+    self.play.next_turn()
 
-  input_box = InputBox([160, 100], [320, 120])
+class GameView:
+  def __init__(self):
+    pygame.init()
 
-  while True:
-    screen.fill(white)
-    input_box.draw(screen)
+    self.screen = pygame.display.set_mode([640, 480])
+    self.clock = pygame.time.Clock()
+    self.font = pygame.font.Font('../asset/NotoSansKR-Regular.ttf', 40)
+
+    self.input_box = InputBox([200, 100], [320, 150])
+    self.past_count = 0 # Backtrace the choosed number
+
+  def update(self, number):
+    self.input_box.update(number)
+    self.draw_game_state(self.game_state)
+
+  def draw_game_state(self, game_state):
+    self.screen.fill(white)
+
+    text = self.font.render(f'{game_state.play.state.id} turn', True, black)
+    size = text.get_size()
+    self.screen.blit(text, (320-size[0]//2, 50-size[1]//2))
+
+    text = self.font.render(f'Current number is.. {game_state.play.count}', True, black)
+    size = text.get_size()
+    self.screen.blit(text, (320-size[0]//2, 350-size[1]//2))
+
+    self.input_box.draw(self.screen)
+
+    self.game_state = game_state
+    self.past_count = game_state.play.count
+
+    self.input_box.update('')
+
+    pygame.display.update()
+    self.clock.tick(60)
+
+  def draw_winner(self, winner):
+    self.screen.fill(white)
+
+    text = self.font.render(f'Game over, {winner} lose!', True, black)
+    size = text.get_size()
+    self.screen.blit(text, (320-size[0]//2, 240-size[1]//2))
 
     for event in pygame.event.get():
       if event.type==pygame.QUIT:
         pygame.quit()
         sys.exit()
-      input_box.input_handler(event)
 
     pygame.display.update()
-    clock.tick(60)
+    self.clock.tick(60)
+
+class GameController:
+  def __init__(self, model, view):
+    self.model = model
+    self.view = view
+
+    self.model.human_strategy.attach(self.view)
+
+  def game_play(self):
+    while True:
+      if self.model.play.count<31:
+        self.view.draw_game_state(self.model)
+        self.model.update()
+      else:
+        self.view.draw_winner(self.model.play.state.id)
+
+def vs_computer():
+  model = GameModel()
+  view = GameView()
+  controller = GameController(model, view)
+
+  controller.game_play()
 
 if __name__=='__main__':
   vs_computer()
